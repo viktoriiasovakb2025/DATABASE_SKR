@@ -1,7 +1,9 @@
 import random
+
 from sqlalchemy import text
-from database_skr.database import Base, SessionLocal, engine
+
 from database_skr import models  # noqa: F401
+from database_skr.database import Base, SessionLocal, engine
 from database_skr.student import Student
 
 
