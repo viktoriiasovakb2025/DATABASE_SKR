@@ -14,7 +14,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-"ruff",
+    "mypy>=2.4.1",
+    "ruff",
 ]
 
 [tool.ruff]
@@ -23,3 +24,6 @@ src = ["src"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
+[tool.mypy]
+mypy_path = "src"
+explicit_package_bases = true

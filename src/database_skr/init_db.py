@@ -38,8 +38,7 @@ def init_db() -> None:
         db.commit()
 
         print(
-            f"Додано {missing_count} студентів. "
-            f"Загалом у базі: {existing_count + missing_count}."
+            f"Додано {missing_count} студентів. Загалом у базі: {existing_count + missing_count}."
         )
 
 

@@ -16,28 +16,34 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     Base.metadata.create_all(bind=engine)
     yield
 
+
 app = FastAPI(
-title="Система обліку студентів",
-lifespan=lifespan,
+    title="Система обліку студентів",
+    lifespan=lifespan,
 )
+
 
 def get_db() -> Generator[Session, None, None]:
     db = SessionLocal()
 
     try:
-     yield db
+        yield db
     finally:
-      db.close()
+        db.close()
+
 
 @app.get("/")
 def home() -> dict[str, str]:
     return {"message": "Система обліку студентів працює"}
 
+
 @app.get("/students", response_model=list[StudentResponse])
 def get_students(
-db: Session = Depends(get_db),
+    db: Session = Depends(get_db),
 ) -> list[Student]:
     return list(db.scalars(select(Student)).all())
+
+
 @app.get("/students/{student_id}", response_model=StudentResponse)
 def get_student(
     student_id: int,
@@ -49,10 +55,12 @@ def get_student(
         raise HTTPException(status_code=404, detail="Студента не знайдено")
 
     return student
+
+
 @app.post("/students", response_model=StudentResponse, status_code=201)
 def create_student(
-student_data: StudentCreate,
-db: Session = Depends(get_db),
+    student_data: StudentCreate,
+    db: Session = Depends(get_db),
 ) -> Student:
     new_student = Student(**student_data.model_dump())
 
@@ -60,6 +68,8 @@ db: Session = Depends(get_db),
     db.commit()
     db.refresh(new_student)
     return new_student
+
+
 @app.put("/students/{student_id}", response_model=StudentResponse)
 def update_student(
     student_id: int,
@@ -81,6 +91,8 @@ def update_student(
     db.refresh(student)
 
     return student
+
+
 @app.delete("/students/{student_id}")
 def delete_student(
     student_id: int,
